@@ -2,6 +2,7 @@ module.exports = function(app, Image){
 
 
     // GET-anrop för att få alla bilder
+    // Kommentar
     app.get("/images", function(req, res) {
         console.log('Finding all images....');
         var allImages = [];
