@@ -1,13 +1,7 @@
 // Importera
 const express = require("express");
-//var https = require('https');
-//var http = require('http');
-//var fs = require('fs');
-//const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-//const session = require('express-session');
-//const mongoDBStore = require("connect-mongodb-session")(session);
 
 // Läs in Schemana
 var Image = require("./models/image.js");
