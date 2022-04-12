@@ -6,7 +6,10 @@ module.exports = function(app, Image){
     app.get("/images", function(req, res) {
         console.log('Finding all images....');
         var allImages = [];
-        Image.find({}, function(err, result){
+        //const query = {news_event: "Frölunda besegrade Växjö i andra kvartsfinalen" };
+        //const query = {"Administrative_data.title": "Frölundalaget i Scandinavium" };
+        const query = {};
+        Image.find(query, function(err, result){
             if(err){
                 console.log(err);
                 res.send(err);
@@ -16,6 +19,9 @@ module.exports = function(app, Image){
                 allImages.push(result[index]._doc); 
             }
             console.dir(allImages);
+            /*for(let index=0; index<allImages.length; index++){
+                console.log(allImages);
+            }*/
             
             return res.json({
                 allImages
@@ -29,8 +35,9 @@ module.exports = function(app, Image){
         var allImages = [];
         var searchKeyword = req.params.keyword;
         console.log(searchKeyword);
+        const query = { keywords: searchKeyword };
         
-        Image.find({keywords: searchKeyword}, function(err, result){
+        Image.find(query, function(err, result){
             if(err){
                 console.log(err);
                 res.send(err);
@@ -53,8 +60,34 @@ module.exports = function(app, Image){
         var allImages = [];
         var searchKeywords = Object.values(req.query.keywords.split(',')); // OBS, array måste heta keywords
         console.dir(searchKeywords);
+        const query = {keywords: {$all: searchKeywords}};
         
-        Image.find({keywords: {$all: searchKeywords}}, function(err, result){
+        Image.find(query, function(err, result){
+            if(err){
+                console.log(err);
+                res.send(err);
+            }
+            for(let index=0; index<result.length; index++){
+                console.dir(result[index]._doc);
+                allImages.push(result[index]._doc); 
+            }
+            console.dir(allImages);
+            
+            return res.json({
+                allImages
+            }); 
+        });
+    });
+
+    // GET-anrop för att söka på publiceringsdatum
+    app.get("/images/publishing_date/:date", function(req, res) {
+        console.log('Finding images based on publishing date');
+        var allImages = [];
+        var searchDate = new Date(req.params.date).toISOString().replace('Z', '')+'+00:00'.toString();
+        console.log(searchDate);
+        const query = { "Administrative_data.publishing_date": searchDate };
+        
+        Image.find(query, function(err, result){
             if(err){
                 console.log(err);
                 res.send(err);
