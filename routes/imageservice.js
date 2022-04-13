@@ -103,5 +103,47 @@ module.exports = function(app, Image){
             }); 
         });
     });
+
+    // GET-anrop för att söka på användarrättigheter
+    app.get("/images/restrictions/:restriction", function(req, res) {
+        console.log('Finding images based on restriction status');
+        var allImages = [];
+        var restriction = req.params.restriction;
+        console.log(restriction);
+        const query = { "restrictions": restriction };
+        
+        Image.find(query, function(err, result){
+            if(err){
+                console.log(err);
+                res.send(err);
+            }
+            for(let index=0; index<result.length; index++){
+                console.dir(result[index]._doc);
+                allImages.push(result[index]._doc); 
+            }
+            console.dir(allImages);
+            
+            return res.json({
+                allImages
+            }); 
+        });
+    });
+
+    // PUT-anrop för att uppdatera användarrättigheter WIP, otestad
+    app.put("/images/restrictions/update/:id", function(req, res) {
+        console.log('Updating the restriction put on the image');
+        var updateId = req.params.id;
+        console.log('updateId: ',updateId);
+        
+        Image.findByIdAndUpdate(updateId, req.body, {new: true})
+        then(image => {
+            if(err){
+                console.log(err);
+                res.send(err);
+            }
+            res.json(image); 
+        });
+            
+        });
     
     }
