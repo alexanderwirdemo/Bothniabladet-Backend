@@ -32,7 +32,7 @@ const ImageSchema = new mongoose.Schema(
     restrictions: { type: String }, 
     });
 
-
+    ImageSchema.index( { keywords: 1 } );
     var collectionName = "image";
     const Image = mongoose.model("image", ImageSchema, collectionName);
     
