@@ -1,13 +1,9 @@
 // Importera
 const express = require("express");
-//var https = require('https');
-//var http = require('http');
-//var fs = require('fs');
-//const path = require("path");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-//const session = require('express-session');
-//const mongoDBStore = require("connect-mongodb-session")(session);
+
+var cors = require('cors');
 
 // Läs in Schemana
 var Image = require("./models/image.js");
@@ -36,11 +32,15 @@ db.once("open", function () {
 // Skapa instans av express
 const app = express();
 
+// CORS
+app.use(cors());
+
 // Body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true}));
 
 require("./routes/imageservice")(app, Image);
+require("./routes/imageserver")(app);
 
 // Port 
 const port = process.env.PORT || 3001; // Heroku sparar port i process.env.PORT
