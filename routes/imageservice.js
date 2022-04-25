@@ -1,5 +1,34 @@
 module.exports = function(app, Image){
+var Image = require("../models/image.js");
 
+    // POST-anrop för att lägga till en bild
+app.post("/images/add", function(req, res) {
+
+    console.dir(req.body);
+
+    // Ny instans av Image
+    var image = new Image();
+
+    // Skapa ett nytt objekt
+    //image.title = req.body.title;
+    image.date = req.body.date;
+    image.photographer = req.body.photographer;
+    image.category = req.body.category;
+    image.subcaregory = req.body.subcaregory;
+    image.Location = req.body.Location;
+    image.Technical_data = req.body.Technical_data;
+    image.keywords = req.body.keywords;
+    image.restrictions = req.body.restrictions;
+
+    // Sparar bilden, fångar upp felmeddelanden
+    image.save(function(err) {
+        if(err) {
+            res.send(err);
+        }
+        res.json(image);
+    });
+    
+});
 
     // GET-anrop för att få alla bilder
     app.get("/images", function(req, res) {
@@ -211,7 +240,7 @@ module.exports = function(app, Image){
         });
     });    
 
-    // GET-anrop för att få bilder baserat på nyhetshändelse
+    // GET-anrop för att få bilder baserat på nyhetshändelse TA BORT PÅ SIKT
     app.get("/event", function(req, res) {
         console.log('Finding images based on news event....');
         var allImagesEvent = [];
