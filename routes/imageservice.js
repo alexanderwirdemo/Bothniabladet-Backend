@@ -175,10 +175,11 @@ app.post("/images/add", function(req, res) {
         });
     
     // GET-anrop för att få bilder baserat på titel
-    app.get("/title", function(req, res) {
+    app.get("/images/title/:title", function(req, res) {
         console.log('Finding images based on title....');
         var foundImagesTitle = [];
-        var query = { "Administrative_data.title": "Växjö Lakers målvakt" };
+        var title = req.params.title;
+        const query = { "Administrative_data.title": title };
         Image.find(query, function(err, result){
             if(err){
                 console.log(err);
@@ -197,10 +198,11 @@ app.post("/images/add", function(req, res) {
     });
 
     // GET-anrop för att få bilder baserat på kategori
-    app.get("/category", function(req, res) {
+    app.get("/images/category/:category", function(req, res) {
         console.log('Finding images based on category....');
         var foundImagesCategory = [];
-        var query = { "category": "Sport" };
+        var category = req.params.category;
+        const query = { "category": category };
         Image.find(query, function(err, result){
             if(err){
                 console.log(err);
@@ -219,10 +221,11 @@ app.post("/images/add", function(req, res) {
     });
 
     // GET-anrop för att få bilder baserat på underkategori
-    app.get("/subcategory", function(req, res) {
+    app.get("/images/subcategory/:subcategory", function(req, res) {
         console.log('Finding images based on subcategory....');
         var foundImagesSubcategory = [];
-        var query = { "subcategory": "Ishockey" };
+        var subcategory = req.params.subcategory;
+        const query = { "subcategory": subcategory };
         Image.find(query, function(err, result){
             if(err){
                 console.log(err);
