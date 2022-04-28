@@ -1,6 +1,6 @@
 # Bothniabladet-Backend
 
-Paket som kan tänkas behövas: express, express-session, mongoose, connect-mongodb-session
+Paket som kan tänkas behövas: express, express-session, mongoose, connect-mongodb-session, cors, multer
 Installeras genom att köra i VSCs egna terminal där projektet ligger:
 npm install express --save
 npm install mongoose --save
