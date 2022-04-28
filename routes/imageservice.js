@@ -10,7 +10,7 @@ app.post("/images/add", function(req, res) {
     var image = new Image();
 
     // Skapa ett nytt objekt
-    //image.title = req.body.title;
+    image.title = req.body.title;
     image.date = req.body.date;
     image.photographer = req.body.photographer;
     image.category = req.body.category;
