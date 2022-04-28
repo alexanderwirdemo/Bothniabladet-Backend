@@ -4,6 +4,7 @@ var Image = require("../models/image.js");
     // POST-anrop för att lägga till en bild
 app.post("/images/add", function(req, res) {
 
+    console.log('bilddata till databasen:');
     console.dir(req.body);
 
     // Ny instans av Image
@@ -14,7 +15,7 @@ app.post("/images/add", function(req, res) {
     image.date = req.body.date;
     image.photographer = req.body.photographer;
     image.category = req.body.category;
-    image.subcaregory = req.body.subcaregory;
+    image.subcategory = req.body.subcategory;
     image.Location = req.body.Location;
     image.Technical_data = req.body.Technical_data;
     image.keywords = req.body.keywords;

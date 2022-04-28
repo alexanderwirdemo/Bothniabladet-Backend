@@ -8,7 +8,7 @@ const ImageSchema = new mongoose.Schema(
     category : { type: [String] },
     subcategory : { type: [String] },
     Location : {
-        GPScoordinates : { type: [Number] },
+        GPSCoordinates : { type: Number },
         place : { type: String },
         city : { type: String },
         region : { type: String },
