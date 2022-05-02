@@ -7,6 +7,7 @@ var cors = require('cors');
 
 // Läs in Schemana
 var Image = require("./models/image.js");
+var User = require("./models/user.js");
 
 const username = "bothnia_admin";
 const password = "bothniabladet";
@@ -54,6 +55,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true}));
 
 require("./routes/imageservice")(app, Image);
+require("./routes/userservice")(app, User);
 require("./routes/imageserver")(app);
 
 // Port 
