@@ -31,7 +31,6 @@ module.exports = function(app, User){
             var username = req.body.username;
             var password = req.body.password;
             const query = { username: username, password: password };
-            //const query = { username: username };
             User.find(query, function(err, result){
                 if(err){
                     console.log(err);
@@ -45,6 +44,30 @@ module.exports = function(app, User){
                 return res.json({
                     user
                 }); 
+            });
+        });
+
+        // POST-anrop för att lägga till en användare
+        app.post("/registeruser/:user", function(req, res) {
+            console.log('Registring one user');
+            console.dir(req.body);
+
+            // Ny instans av User
+            var user = new User();
+
+            // Skapa ett nytt objekt
+            user.username = req.body.username;
+            user.password = req.body.password;
+            user.name = req.body.name;
+            user.invoiceAddress = req.body.invoiceAddress;
+            user.role = req.body.role;
+ 
+            // Sparar användaren, fångar upp felmeddelanden
+            user.save(function(err) {
+                if(err) {
+                res.send(err);
+                }
+            res.json(user);
             });
         });
        
