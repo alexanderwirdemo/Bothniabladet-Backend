@@ -20,6 +20,8 @@ app.post("/images/add", function(req, res) {
     image.Technical_data = req.body.Technical_data;
     image.keywords = req.body.keywords;
     image.restrictions = req.body.restrictions;
+    image.price = req.body.price;
+    image.reviewed = req.body.reviewed;
 
     // Sparar bilden, fångar upp felmeddelanden
     image.save(function(err) {
@@ -54,6 +56,27 @@ app.post("/images/add", function(req, res) {
             
             return res.json({
                 allImages
+            }); 
+        });
+    });
+
+    // GET-anrop för att få alla bilder som behöver granskas
+    app.get("/images/toreview", function(req, res) {
+        console.log('Finding all images to review....');
+        var allImagesToReview = [];
+        const query = { reviewed: false };
+        Image.find(query, function(err, result){
+            if(err){
+                console.log(err);
+                res.send(err);
+            }
+            for(let index=0; index<result.length; index++){
+                console.dir(result[index]._doc);
+                allImagesToReview.push(result[index]._doc); 
+            }
+            console.dir(allImagesToReview);
+            return res.json({
+                allImagesToReview
             }); 
         });
     });

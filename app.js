@@ -54,6 +54,11 @@ app.all('/*', function(req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded( { extended: true}));
 
+// Möjlighet att nå bilderna sparade på servern
+app.use(express.static('public')); 
+app.use('/uploaded_images', express.static('uploaded_images'));
+app.use(express.static('uploaded_images'));
+
 require("./routes/imageservice")(app, Image);
 require("./routes/userservice")(app, User);
 require("./routes/imageserver")(app);
