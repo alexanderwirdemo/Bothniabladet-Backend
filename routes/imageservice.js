@@ -206,7 +206,7 @@ app.post("/images/add", function(req, res) {
     });
 
     // PUT-anrop för att uppdatera granskning
-    app.put("/images/reviewed/update/:id", function(req, res) {
+    app.put("/images/reviewed/update/:id", async function(req, res) {
         console.log('Updating the review status of the image');
         console.dir(req);
         var updateId = req.params.id;
@@ -214,12 +214,15 @@ app.post("/images/add", function(req, res) {
         
         Image.findByIdAndUpdate(updateId, req.body, {new: true})
         .then(image => {
-            if(err){
-                console.log(err);
+            if(err) {
                 res.send(err);
             }
             res.json(image); 
-        });
+        })
+        .catch(function () {
+            console.log("Promise Rejected");
+            res.send();
+       });
             
         });
 
