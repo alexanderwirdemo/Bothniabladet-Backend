@@ -205,6 +205,24 @@ app.post("/images/add", function(req, res) {
         });
     });
 
+    // PUT-anrop för att uppdatera granskning
+    app.put("/images/reviewed/update/:id", function(req, res) {
+        console.log('Updating the review status of the image');
+        console.dir(req);
+        var updateId = req.params.id;
+        console.log('updateId: ',updateId);
+        
+        Image.findByIdAndUpdate(updateId, req.body, {new: true})
+        .then(image => {
+            if(err){
+                console.log(err);
+                res.send(err);
+            }
+            res.json(image); 
+        });
+            
+        });
+
     // PUT-anrop för att uppdatera användarrättigheter WIP, otestad
     app.put("/images/restrictions/update/:id", function(req, res) {
         console.log('Updating the restriction put on the image');
@@ -221,6 +239,7 @@ app.post("/images/add", function(req, res) {
         });
             
         });
+
     
     // GET-anrop för att få bilder baserat på titel
     app.get("/images/title/:title", function(req, res) {
