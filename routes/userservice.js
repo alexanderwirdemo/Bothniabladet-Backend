@@ -71,6 +71,25 @@ module.exports = function(app, User){
             });
         });
        
-        }
+        // PUT-anrop för att uppdatera Användaruppgifter
+        app.put("/users/update/:id", async function(req, res) {
+            console.log('Updating user account');
+            console.dir(req);
+            var updateId = req.params.id;
+            console.log('updateId: ',updateId);
+        
+            User.findByIdAndUpdate(updateId, req.body, {new: true})
+            .then(image => {
+                if(err) {
+                    res.send(err);
+                }
+                res.json(image); 
+            })
+            .catch(function () {
+                console.log("Promise Rejected");
+                res.send();
+            });
+        });
+    }
     
     
