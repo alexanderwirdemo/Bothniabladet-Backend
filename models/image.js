@@ -24,6 +24,8 @@ const ImageSchema = new mongoose.Schema(
     },
     keywords: { type: [String] },
     restrictions: { type: String }, 
+    price: { type: Number },
+    reviewed: { type: Boolean },
     });
 
     ImageSchema.index( { keywords: 1 } );

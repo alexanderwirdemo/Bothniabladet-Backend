@@ -20,6 +20,8 @@ app.post("/images/add", function(req, res) {
     image.Technical_data = req.body.Technical_data;
     image.keywords = req.body.keywords;
     image.restrictions = req.body.restrictions;
+    image.price = req.body.price;
+    image.reviewed = req.body.reviewed;
 
     // Sparar bilden, fångar upp felmeddelanden
     image.save(function(err) {
@@ -54,6 +56,27 @@ app.post("/images/add", function(req, res) {
             
             return res.json({
                 allImages
+            }); 
+        });
+    });
+
+    // GET-anrop för att få alla bilder som behöver granskas
+    app.get("/images/toreview", function(req, res) {
+        console.log('Finding all images to review....');
+        var allImagesToReview = [];
+        const query = { reviewed: false };
+        Image.find(query, function(err, result){
+            if(err){
+                console.log(err);
+                res.send(err);
+            }
+            for(let index=0; index<result.length; index++){
+                console.dir(result[index]._doc);
+                allImagesToReview.push(result[index]._doc); 
+            }
+            console.dir(allImagesToReview);
+            return res.json({
+                allImagesToReview
             }); 
         });
     });
@@ -182,6 +205,27 @@ app.post("/images/add", function(req, res) {
         });
     });
 
+    // PUT-anrop för att uppdatera granskning
+    app.put("/images/reviewed/update/:id", async function(req, res) {
+        console.log('Updating the review status of the image');
+        console.dir(req);
+        var updateId = req.params.id;
+        console.log('updateId: ',updateId);
+        
+        Image.findByIdAndUpdate(updateId, req.body, {new: true})
+        .then(image => {
+            if(err) {
+                res.send(err);
+            }
+            res.json(image); 
+        })
+        .catch(function () {
+            console.log("Promise Rejected");
+            res.send();
+       });
+            
+        });
+
     // PUT-anrop för att uppdatera användarrättigheter WIP, otestad
     app.put("/images/restrictions/update/:id", function(req, res) {
         console.log('Updating the restriction put on the image');
@@ -198,6 +242,7 @@ app.post("/images/add", function(req, res) {
         });
             
         });
+
     
     // GET-anrop för att få bilder baserat på titel
     app.get("/images/title/:title", function(req, res) {
