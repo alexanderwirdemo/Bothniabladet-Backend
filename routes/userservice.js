@@ -79,11 +79,11 @@ module.exports = function(app, User){
             console.log('updateId: ',updateId);
         
             User.findByIdAndUpdate(updateId, req.body, {new: true})
-            .then(image => {
+            .then(user => {
                 if(err) {
                     res.send(err);
                 }
-                res.json(image); 
+                res.json(user); 
             })
             .catch(function () {
                 console.log("Promise Rejected");
