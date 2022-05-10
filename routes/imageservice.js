@@ -1,5 +1,4 @@
 module.exports = function(app, Image){
-var Image = require("../models/image.js");
 
     // POST-anrop för att lägga till en bild
 app.post("/images/add", function(req, res) {

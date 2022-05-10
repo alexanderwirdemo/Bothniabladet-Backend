@@ -1,4 +1,5 @@
-module.exports = function(app){
+module.exports = function(app, exiftool, exifr, fs, piexif){
+    
 
 const multer = require('multer');
 var fileExtension = require('file-extension');
@@ -42,6 +43,25 @@ app.post('/uploadfile', upload.single('uploadedImage'), (req, res, next) => {
     const file = req.file;
     console.log('file i upload:');
     console.log(file);
+    //let output = await exifr.parse(file.path);
+    //console.log(output);
+    //getExif(filepath);
+    //let filepath = 'http://localhost:3001/'+file.path;
+    let filepath = file.path;
+    const palm1Exif = getExifFromJpegFile(filepath);
+    console.log('palm:',palm1Exif);
+    
+    
+
+
+//funkar, ger dock ej gps men en del annat... pixlar
+    exiftool
+  .read(file.path)
+  .then((tags ) =>
+    console.log(tags)
+  )
+  .catch((err) => console.error("Something terrible happened: ", err));
+    
     if (!file) {
         const error = new Error('Please upload a file')
         error.httpStatusCode = 400
@@ -59,6 +79,16 @@ app.post('/uploadfile', upload.single('uploadedImage'), (req, res, next) => {
     })
 })
 
+async function getExif(filepath) {
+    console.log(filepath);
+    const palm1Exif = getExifFromJpegFile(filepath);
+    console.log(palm1Exif);
+    //let output = await exifr.parse(filepath);
+    //console.log(output);
+}
 
+// Handy utility functions
+const getBase64DataFromJpegFile = filename => fs.readFileSync(filename).toString('binary');
+const getExifFromJpegFile = filename => piexif.load(getBase64DataFromJpegFile(filename));
            
     }

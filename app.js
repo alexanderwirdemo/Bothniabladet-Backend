@@ -2,6 +2,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const ExifTool = require("exiftool-vendored").ExifTool
+const exifr = require("exifr");
+const path = require("path");
+
+// Modules required for most of these exercises
+const fs = require('fs');
+const piexif = require('piexifjs');
+
 
 var cors = require('cors');
 
@@ -59,9 +67,11 @@ app.use(express.static('public'));
 app.use('/uploaded_images', express.static('uploaded_images'));
 app.use(express.static('uploaded_images'));
 
+const exiftool = new ExifTool({ taskTimeoutMillis: 5000 });
+
 require("./routes/imageservice")(app, Image);
 require("./routes/userservice")(app, User);
-require("./routes/imageserver")(app);
+require("./routes/imageserver")(app, exiftool, exifr, fs, piexif);
 
 // Port 
 const port = process.env.PORT || 3001; // Heroku sparar port i process.env.PORT
