@@ -107,7 +107,7 @@ app.post("/images/add", function(req, res) {
     });
 
     // GET-anrop för att få alla bilder om sökfältet är tomt
-    app.get("/images/keyword/", function(req, res) {
+    app.get("/images/keywords/", function(req, res) {
         console.log('Finding all images....');
         var allImages = [];
         //const query = {news_event: "Frölunda besegrade Växjö i andra kvartsfinalen" };
@@ -131,10 +131,12 @@ app.post("/images/add", function(req, res) {
     });
 
     // GET-anrop för att söka på flera nyckelord
-    app.get("/images/keywords/", function(req, res) {
+    app.get("/images/keywords/:keywords", function(req, res) {
         console.log('Finding images based on keywords');
+        var placeholder = req.params.keywords
+        console.dir(placeholder)
         var allImages = [];
-        var searchKeywords = Object.values(req.query.keywords.split(',')); // OBS, array måste heta keywords
+        var searchKeywords = Object.values(placeholder.split(',')); // OBS, array måste heta keywords
         console.dir(searchKeywords);
         const query = {keywords: {$all: searchKeywords}};
         
@@ -154,6 +156,33 @@ app.post("/images/add", function(req, res) {
             }); 
         });
     });
+
+        // GET-anrop för att göra en avancerad sökning
+        app.get("/images/advanced/:advanced", function(req, res) {
+            console.log('Finding images based on advanced search');
+            console.log(req.params.advanced);
+            
+            var allImages = [];
+            var searchKeywords = Object.values(req.params.advanced.split('#'));
+            console.dir(searchKeywords);
+            const query = {keywords: {$all: searchKeywords}};
+            
+            Image.find(query, function(err, result){
+                if(err){
+                    console.log(err);
+                    res.send(err);
+                }
+                for(let index=0; index<result.length; index++){
+                    console.dir(result[index]._doc);
+                    allImages.push(result[index]._doc); 
+                }
+                console.dir(allImages);
+                
+                return res.json({
+                    allImages
+                }); 
+            });
+        });
 
     // GET-anrop för att söka på publiceringsdatum
     app.get("/images/publishing_date/:date", function(req, res) {
@@ -193,7 +222,7 @@ app.post("/images/add", function(req, res) {
                 console.log(err);
                 res.send(err);
             }
-            for(let index=0; index<result.length; index++){
+            for(var index=0; index<result.length; index++){
                 console.dir(result[index]._doc);
                 allImages.push(result[index]._doc); 
             }
