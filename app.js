@@ -16,6 +16,7 @@ var cors = require('cors');
 // Läs in Schemana
 var Image = require("./models/image.js");
 var User = require("./models/user.js");
+const AdvancedSearch = require("./models/advancedSearch.js");
 
 const username = "bothnia_admin";
 const password = "bothniabladet";
@@ -69,7 +70,8 @@ app.use(express.static('uploaded_images'));
 
 const exiftool = new ExifTool({ taskTimeoutMillis: 5000 });
 
-require("./routes/imageservice")(app, Image);
+
+require("./routes/imageservice")(app, Image, AdvancedSearch);
 require("./routes/userservice")(app, User);
 require("./routes/imageserver")(app, exiftool, exifr, fs, piexif);
 
