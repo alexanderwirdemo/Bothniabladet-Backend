@@ -1,4 +1,62 @@
-module.exports = function(app, Image){
+module.exports = function(app, Image, AdvancedSearch){
+
+
+        // GET-anrop för att göra en avancerad sökning
+        app.post("/images/advanced", function(req, res) {
+            console.log('Finding images based on advanced search');
+            console.dir(req);
+
+            var advancedSearch = new AdvancedSearch();
+
+            advancedSearch.advanced_searchString = req.body.advanced_searchString;
+            advancedSearch.advanced_searchTitle = req.body.advanced_searchTitle;
+            advancedSearch.advanced_searchPhotografer = req.body.advanced_searchPhotografer;
+            advancedSearch.advanced_searchPlace = req.body.advanced_searchPlace;
+
+            var vesselObject = {reviewed: true}
+            var keywordsObject = {keywords: {$all: advancedSearch.advanced_searchString}}
+            var titleObject = {title: advancedSearch.advanced_searchTitle}
+            var photographerObject = {photographer: advancedSearch.advanced_searchPhotografer}
+            var placeObject = {"Location.place": advancedSearch.advanced_searchPlace}
+            var allImages = [];
+
+            if(advancedSearch.advanced_searchString!=""){
+                vesselObject = Object.assign(vesselObject,keywordsObject)
+            }
+
+            if(advancedSearch.advanced_searchTitle!=""){
+                vesselObject = Object.assign(vesselObject,titleObject)
+            }
+
+            if(advancedSearch.advanced_searchPhotografer!=""){
+                vesselObject = Object.assign(vesselObject,photographerObject)
+            }
+
+            if(advancedSearch.advanced_searchPlace!=""){
+                vesselObject = Object.assign(vesselObject,placeObject)
+            }
+
+            const query = vesselObject
+            
+            Image.find(query, function(err, result){
+                if(err){
+                    console.log(err);
+                    res.send(err);
+                }
+                for(let index=0; index<result.length; index++){
+                    console.dir(result[index]._doc);
+                    allImages.push(result[index]._doc); 
+                }
+                console.dir(allImages);
+                console.dir(query);
+                
+                return res.json({
+                    allImages
+                }); 
+            });
+        });
+
+
 
     // POST-anrop för att lägga till en bild
 app.post("/images/add", function(req, res) {
@@ -111,7 +169,7 @@ app.post("/images/add", function(req, res) {
         var allImages = [];
         //const query = {news_event: "Frölunda besegrade Växjö i andra kvartsfinalen" };
         //const query = {"Administrative_data.title": "Frölundalaget i Scandinavium" };
-        const query = {};
+        const query = {reviewed: true};
         Image.find(query, function(err, result){
             if(err){
                 console.log(err);
@@ -137,7 +195,7 @@ app.post("/images/add", function(req, res) {
         var allImages = [];
         var searchKeywords = Object.values(placeholder.split(',')); // OBS, array måste heta keywords
         console.dir(searchKeywords);
-        const query = {keywords: {$all: searchKeywords}};
+        const query = {keywords: {$all: searchKeywords}, reviewed: true, restrictions: "None"};
         
         Image.find(query, function(err, result){
             if(err){
@@ -156,32 +214,7 @@ app.post("/images/add", function(req, res) {
         });
     });
 
-        // GET-anrop för att göra en avancerad sökning
-        app.get("/images/advanced/:advanced", function(req, res) {
-            console.log('Finding images based on advanced search');
-            console.log(req.params.advanced);
-            
-            var allImages = [];
-            var searchKeywords = Object.values(req.params.advanced.split('#'));
-            console.dir(searchKeywords);
-            const query = {keywords: {$all: searchKeywords}};
-            
-            Image.find(query, function(err, result){
-                if(err){
-                    console.log(err);
-                    res.send(err);
-                }
-                for(let index=0; index<result.length; index++){
-                    console.dir(result[index]._doc);
-                    allImages.push(result[index]._doc); 
-                }
-                console.dir(allImages);
-                
-                return res.json({
-                    allImages
-                }); 
-            });
-        });
+
 
     // GET-anrop för att söka på publiceringsdatum
     app.get("/images/publishing_date/:date", function(req, res) {
