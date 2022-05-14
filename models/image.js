@@ -16,7 +16,6 @@ const ImageSchema = new mongoose.Schema(
     },
     Technical_data : {
         format : { type: String },
-        version : { type: String },
         image_size : { type: String },
         file_size : { type: String },
         resolution : { type: String },
@@ -26,6 +25,7 @@ const ImageSchema = new mongoose.Schema(
     restrictions: { type: String }, 
     price: { type: Number },
     reviewed: { type: Boolean },
+    variants: { type: Array },
     });
 
     ImageSchema.index( { keywords: 1 } );

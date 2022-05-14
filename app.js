@@ -67,11 +67,13 @@ app.use(bodyParser.urlencoded( { extended: true}));
 app.use(express.static('public')); 
 app.use('/uploaded_images', express.static('uploaded_images'));
 app.use(express.static('uploaded_images'));
+app.use('/uploaded_images_variants', express.static('uploaded_images_variants'));
+app.use(express.static('uploaded_images_variants'));
 
 const exiftool = new ExifTool({ taskTimeoutMillis: 5000 });
 
 
-require("./routes/imageservice")(app, Image, AdvancedSearch);
+require("./routes/imageservice")(app, exiftool, Image, AdvancedSearch);
 require("./routes/userservice")(app, User);
 require("./routes/imageserver")(app, exiftool, exifr, fs, piexif);
 
