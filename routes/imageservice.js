@@ -86,6 +86,7 @@ image.Technical_data = req.body.Technical_data;
 // Justera tekniska data
 image.Technical_data.resolution = tags.Megapixels;
 image.Technical_data.camera = tags.Make+' '+tags.Model;
+image.description = req.body.description;
 image.keywords = req.body.keywords;
 image.restrictions = req.body.restrictions;
 image.remaining_publications = req.body.remaining_publications;

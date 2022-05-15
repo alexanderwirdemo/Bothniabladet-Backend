@@ -23,6 +23,7 @@ const ImageSchema = new mongoose.Schema(
         resolution : { type: String },
         camera : { type: String },
     },
+    description: { type: String },
     keywords: { type: [String] },
     restrictions: { type: String }, 
     remaining_publications: { type: Number },
