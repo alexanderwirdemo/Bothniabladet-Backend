@@ -26,6 +26,7 @@ const ImageSchema = new mongoose.Schema(
     keywords: { type: [String] },
     restrictions: { type: String }, 
     remaining_publications: { type: Number },
+    publication_dates: { type: [Date] },
     price: { type: Number },
     reviewed: { type: Boolean },
     variants: { type: Array },

@@ -89,6 +89,7 @@ image.Technical_data.camera = tags.Make+' '+tags.Model;
 image.keywords = req.body.keywords;
 image.restrictions = req.body.restrictions;
 image.remaining_publications = req.body.remaining_publications;
+image.publication_dates = req.body.publication_dates;
 image.price = req.body.price;
 image.reviewed = req.body.reviewed;
 image.variants = req.body.variants;
