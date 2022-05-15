@@ -16,16 +16,21 @@ const ImageSchema = new mongoose.Schema(
     },
     Technical_data : {
         format : { type: String },
-        version : { type: String },
         image_size : { type: String },
+        height : { type: Number },
+        width : { type: Number },
         file_size : { type: String },
         resolution : { type: String },
         camera : { type: String },
     },
+    description: { type: String },
     keywords: { type: [String] },
     restrictions: { type: String }, 
+    remaining_publications: { type: Number },
+    publication_dates: { type: [Date] },
     price: { type: Number },
     reviewed: { type: Boolean },
+    variants: { type: Array },
     });
 
     ImageSchema.index( { keywords: 1 } );

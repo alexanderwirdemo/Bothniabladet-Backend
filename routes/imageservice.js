@@ -1,4 +1,4 @@
-module.exports = function(app, Image, AdvancedSearch){
+module.exports = function(app, exiftool, Image, AdvancedSearch){
 
 
         // GET-anrop för att göra en avancerad sökning
@@ -66,27 +66,51 @@ app.post("/images/add", function(req, res) {
 
     // Ny instans av Image
     var image = new Image();
+    var taggar;
 
-    // Skapa ett nytt objekt
-    image.title = req.body.title;
-    image.date = req.body.date;
-    image.photographer = req.body.photographer;
-    image.category = req.body.category;
-    image.subcategory = req.body.subcategory;
-    image.Location = req.body.Location;
-    image.Technical_data = req.body.Technical_data;
-    image.keywords = req.body.keywords;
-    image.restrictions = req.body.restrictions;
-    image.price = req.body.price;
-    image.reviewed = req.body.reviewed;
+    //funkar, ger dock ej gps men en del annat... pixlar
+    exiftool
+  .read('uploaded_images/'+req.body.title)
+  .then((tags ) =>{
+     console.log("taggar:");
+        console.log(tags);
 
-    // Sparar bilden, fångar upp felmeddelanden
-    image.save(function(err) {
-        if(err) {
-            res.send(err);
-        }
-        res.json(image);
-    });
+// Skapa ett nytt objekt
+image.title = req.body.title;
+image.date = req.body.date;
+image.photographer = req.body.photographer;
+image.category = req.body.category;
+image.subcategory = req.body.subcategory;
+image.Location = req.body.Location;
+image.Technical_data = req.body.Technical_data;
+// Justera tekniska data
+image.Technical_data.resolution = tags.Megapixels;
+image.Technical_data.camera = tags.Make+' '+tags.Model;
+image.description = req.body.description;
+image.keywords = req.body.keywords;
+image.restrictions = req.body.restrictions;
+image.remaining_publications = req.body.remaining_publications;
+image.publication_dates = req.body.publication_dates;
+image.price = req.body.price;
+image.reviewed = req.body.reviewed;
+image.variants = req.body.variants;
+
+// Sparar bilden, fångar upp felmeddelanden
+image.save(function(err) {
+    if(err) {
+        res.send(err);
+    }
+    res.json(image);
+});
+  }
+
+  )
+  .catch((err) => console.error("Something terrible happened: ", err));
+
+  //console.log(tags.Make);
+  //console.log(tags.Model);
+  //console.log(tags.Megapixels);
+    
     
 });
 
@@ -274,6 +298,32 @@ app.post("/images/add", function(req, res) {
         console.log('updateId: ',updateId);
         
         Image.findByIdAndUpdate(updateId, req.body, {new: true})
+        .then(image => {
+            if(err) {
+                res.send(err);
+            }
+            res.json(image); 
+        })
+        .catch(function () {
+            console.log("Promise Rejected");
+            res.send();
+       });
+            
+        });
+
+    // PUT-anrop för att lägga till variant
+    app.put("/images/addvariant", async function(req, res) {
+        console.log('Adding variant');
+        console.dir(req.body);
+        var updateId = req.body.id;
+        console.log('updateId: ',updateId);
+        const variants = {
+            'variants' : req.body.variants
+        }
+        console.log('variant: ',variants);
+
+        
+        Image.findByIdAndUpdate(updateId, variants, {new: true})
         .then(image => {
             if(err) {
                 res.send(err);
