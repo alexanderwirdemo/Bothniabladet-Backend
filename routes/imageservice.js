@@ -139,6 +139,7 @@ app.post("/images/add", function(req, res) {
     });
 
     // GET-anrop för att söka på ett nyckelord
+    // Denna används inte i nuläget, behöver den vara kvar? --Fredrik
     app.get("/images/keyword/:keyword", function(req, res) {
         console.log('Finding images based on keyword');
         var allImages = [];
@@ -306,6 +307,7 @@ app.post("/images/add", function(req, res) {
 
     
     // GET-anrop för att få bilder baserat på titel
+    //Behöver denna vara kvar? --Fredrik
     app.get("/images/title/:title", function(req, res) {
         console.log('Finding images based on title....');
         var foundImagesTitle = [];
@@ -331,7 +333,7 @@ app.post("/images/add", function(req, res) {
     // GET-anrop för att få bilder baserat på kategori
     app.get("/images/category/:category", function(req, res) {
         console.log('Finding images based on category....');
-        var foundImagesCategory = [];
+        var allImages = [];
         var category = req.params.category;
         const query = { "category": category };
         Image.find(query, function(err, result){
@@ -341,12 +343,12 @@ app.post("/images/add", function(req, res) {
             }
             for(let index=0; index<result.length; index++){
                 console.dir(result[index]._doc);
-                foundImagesCategory.push(result[index]._doc); 
+                allImages.push(result[index]._doc); 
             }
-            console.dir(foundImagesCategory);
+            console.dir(allImages);
             
             return res.json({
-                foundImagesCategory
+                allImages
             }); 
         });
     });
@@ -354,7 +356,7 @@ app.post("/images/add", function(req, res) {
     // GET-anrop för att få bilder baserat på underkategori
     app.get("/images/subcategory/:subcategory", function(req, res) {
         console.log('Finding images based on subcategory....');
-        var foundImagesSubcategory = [];
+        var allImages = [];
         var subcategory = req.params.subcategory;
         const query = { "subcategory": subcategory };
         Image.find(query, function(err, result){
@@ -364,12 +366,12 @@ app.post("/images/add", function(req, res) {
             }
             for(let index=0; index<result.length; index++){
                 console.dir(result[index]._doc);
-                foundImagesSubcategory.push(result[index]._doc); 
+                allImages.push(result[index]._doc); 
             }
-            console.dir(foundImagesSubcategory);
+            console.dir(allImages);
             
             return res.json({
-                foundImagesSubcategory
+                allImages
             }); 
         });
     });    
