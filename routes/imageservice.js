@@ -218,9 +218,9 @@ image.save(function(err) {
         var placeholder = req.params.keywords
         console.dir(placeholder)
         var allImages = [];
-        var searchKeywords = Object.values(placeholder.split(',')); // OBS, array måste heta keywords
+        var searchKeywords = Object.values(placeholder.split(','));
         console.dir(searchKeywords);
-        const query = {keywords: {$all: searchKeywords}, reviewed: true, restrictions: "None"};
+        const query = {keywords: {$all: searchKeywords}, reviewed: true, restrictions: "Inga"};
         
         Image.find(query, function(err, result){
             if(err){

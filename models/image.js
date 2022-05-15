@@ -30,7 +30,7 @@ const ImageSchema = new mongoose.Schema(
     publication_dates: { type: [Date] },
     price: { type: Number },
     reviewed: { type: Boolean },
-    variants: { type: Array },
+    variants: { type: [String] },
     });
 
     ImageSchema.index( { keywords: 1 } );
