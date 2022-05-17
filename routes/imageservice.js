@@ -68,7 +68,7 @@ app.post("/images/add", function(req, res) {
     var image = new Image();
     var taggar;
 
-    //funkar, ger dock ej gps men en del annat... pixlar
+    //funkar, ger dock ej gps men en del annat... pixlar och kamera, t ex
     exiftool
   .read('uploaded_images/'+req.body.title)
   .then((tags ) =>{
@@ -106,20 +106,26 @@ image.save(function(err) {
 
   )
   .catch((err) => console.error("Something terrible happened: ", err));
+});
 
-  //console.log(tags.Make);
-  //console.log(tags.Model);
-  //console.log(tags.Megapixels);
-    
-    
+// DELETE-anrop för att radera bild
+app.delete("/images/remove/:id", function(req, res){
+    var deleteId = req.params.id;
+
+    Image.deleteOne({
+        _id: deleteId
+    }, function(err, Image) {
+        if(err) {
+            res.send(err);
+        }
+        res.json({ message: "Bild borttagen ur databasen, id: " + deleteId});
+    });
 });
 
     // GET-anrop för att få alla bilder
     app.get("/images", function(req, res) {
         console.log('Finding all images....');
         var allImages = [];
-        //const query = {news_event: "Frölunda besegrade Växjö i andra kvartsfinalen" };
-        //const query = {"Administrative_data.title": "Frölundalaget i Scandinavium" };
         const query = {};
         Image.find(query, function(err, result){
             if(err){
@@ -130,11 +136,7 @@ image.save(function(err) {
                 console.dir(result[index]._doc);
                 allImages.push(result[index]._doc); 
             }
-            console.dir(allImages);
-            /*for(let index=0; index<allImages.length; index++){
-                console.log(allImages);
-            }*/
-            
+            console.dir(allImages);            
             return res.json({
                 allImages
             }); 
@@ -192,8 +194,6 @@ image.save(function(err) {
     app.get("/images/keywords/", function(req, res) {
         console.log('Finding all images....');
         var allImages = [];
-        //const query = {news_event: "Frölunda besegrade Växjö i andra kvartsfinalen" };
-        //const query = {"Administrative_data.title": "Frölundalaget i Scandinavium" };
         const query = {reviewed: true};
         Image.find(query, function(err, result){
             if(err){
@@ -238,8 +238,6 @@ image.save(function(err) {
             }); 
         });
     });
-
-
 
     // GET-anrop för att söka på publiceringsdatum
     app.get("/images/publishing_date/:date", function(req, res) {
@@ -300,9 +298,6 @@ image.save(function(err) {
         
         Image.findByIdAndUpdate(updateId, req.body, {new: true})
         .then(image => {
-            if(err) {
-                res.send(err);
-            }
             res.json(image); 
         })
         .catch(function () {
@@ -326,9 +321,6 @@ image.save(function(err) {
         
         Image.findByIdAndUpdate(updateId, variants, {new: true})
         .then(image => {
-            if(err) {
-                res.send(err);
-            }
             res.json(image); 
         })
         .catch(function () {
