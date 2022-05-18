@@ -6,7 +6,8 @@ const UserSchema = new mongoose.Schema(
     password : { type: String },
     name : { type: String },
     invoiceAddress : { type: String },
-    role : { type: String } 
+    role : { type: String }, 
+    discount : { type: Number }
     });
 
     var collectionName = "user";
