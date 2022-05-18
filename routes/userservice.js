@@ -60,7 +60,8 @@ module.exports = function(app, User){
             user.password = req.body.password;
             user.name = req.body.name;
             user.invoiceAddress = req.body.invoiceAddress;
-            user.role = req.body.role;
+            user.role = "Regular";
+            user.discount = "0"; 
  
             // Sparar användaren, fångar upp felmeddelanden
             user.save(function(err) {
